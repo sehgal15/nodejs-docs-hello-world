@@ -56,7 +56,7 @@ const router = express.Router();
 
 // Hello World for index page
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'privacy.html'))
+    res.sendFile(path.join(__dirname, 'index.html'))
 })
 
 app.get('/api', function (req, res) {
