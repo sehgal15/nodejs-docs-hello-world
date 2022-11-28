@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 const crypto = require('crypto');
 const pkg = require('./package.json');
+const path = require('path');
 
 
 // App constants
@@ -55,7 +56,7 @@ const router = express.Router();
 
 // Hello World for index page
 app.get('/', function (req, res) {
-    return res.send("Hello World!");
+    res.sendFile(path.join(__dirname, 'privacy.html'))
 })
 
 app.get('/api', function (req, res) {
