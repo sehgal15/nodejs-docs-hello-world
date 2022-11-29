@@ -9,7 +9,10 @@ const cors = require('cors')
 const crypto = require('crypto');
 const pkg = require('./package.json');
 const path = require('path');
-import { v4 as uuidv4, v6 as uuidv6 } from 'uuid';
+const { 
+  v1: uuidv1,
+  v4: uuidv4,
+} = require('uuid');
 
 
 // App constants
