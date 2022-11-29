@@ -9,10 +9,13 @@ const cors = require('cors')
 const crypto = require('crypto');
 const pkg = require('./package.json');
 const path = require('path');
+const requestlib = require('request');
 const { 
   v1: uuidv1,
   v4: uuidv4,
 } = require('uuid');
+const { request } = require('http');
+require('dotenv').config()
 
 
 // App constants
@@ -220,19 +223,19 @@ router.delete('/accounts/:user', (req, res) => {
   // Get a directline configuration (accessed at GET /api/config)
 const userId = "dl_" + uuidv4();
 
-router.get('/config', function(req, res) {
+app.get('/config', function(req, res) {
     const options = {
         method: 'POST',
         uri: 'https://directline.botframework.com/v3/directline/tokens/generate',
         headers: {
-            'Authorization': 'Bearer ' + process.env.directLineSecret
+            'Authorization': 'Bearer ' + String(process.env.LINESECRET)
         },
         json: {
             User: { Id: userId }
         }
     };
 
-    request.post(options, (error, response, body) => {
+    requestlib.post(options, (error, response, body) => {
         if (!error && response.statusCode < 300) {
             res.json({
                     token: body.token,
@@ -240,6 +243,7 @@ router.get('/config', function(req, res) {
                 });
         }
         else {
+            console.log(response);
             res.status(500).send('Call to retrieve token from Direct Line failed');
         }
     });
