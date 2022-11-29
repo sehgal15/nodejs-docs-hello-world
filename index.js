@@ -9,6 +9,7 @@ const cors = require('cors')
 const crypto = require('crypto');
 const pkg = require('./package.json');
 const path = require('path');
+import { v4 as uuidv4, v6 as uuidv6 } from 'uuid';
 
 
 // App constants
@@ -212,6 +213,35 @@ router.delete('/accounts/:user', (req, res) => {
     res.sendStatus(204);
   });
   
+
+  // Get a directline configuration (accessed at GET /api/config)
+const userId = "dl_" + uuidv4();
+
+router.get('/config', function(req, res) {
+    const options = {
+        method: 'POST',
+        uri: 'https://directline.botframework.com/v3/directline/tokens/generate',
+        headers: {
+            'Authorization': 'Bearer ' + process.env.directLineSecret
+        },
+        json: {
+            User: { Id: userId }
+        }
+    };
+
+    request.post(options, (error, response, body) => {
+        if (!error && response.statusCode < 300) {
+            res.json({
+                    token: body.token,
+                    userId: userId
+                });
+        }
+        else {
+            res.status(500).send('Call to retrieve token from Direct Line failed');
+        }
+    });
+});
+
 // ***************************************************************************
 
 // Add 'api` prefix to all routes
